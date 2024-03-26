@@ -1,0 +1,1 @@
+const socket_instance = io('http://localhost:3000');
