@@ -1,25 +1,25 @@
 const express = require('express');
 const app = express();
 const http = require('http');
-const server = http.createServer(app);
-const io = require('socket.io')(server, {
-    cors: {
-      origin: ['chrome-extension://obhollcmgamhbbbccmfmnhkohbknlbgl', 'https://preev.com'],
-      methods: ['GET', 'POST']
-    }
-  });
+const WebSocket = require('ws');
 const cors = require('cors');
 
 app.use(cors({
     origin: ['chrome-extension://obhollcmgamhbbbccmfmnhkohbknlbgl','https://preev.com']
-  }));
+}));
 
-io.on('connection', (socket) => {
+const server = http.createServer(app);
+const wss = new WebSocket.Server({ server });
+
+wss.on('connection', (ws) => {
   console.log('Cliente conectado');
 
   // Manejar el evento 'valor' enviado por el cliente (la extensión del navegador)
-  socket.on('valor', (data) => {
-    console.log('Nuevo valor recibido:', data.valor);
+  ws.on('message', (message) => {
+    const data = JSON.parse(message);
+    if (data.event === 'valor') {
+      console.log('Nuevo valor recibido:', data.valor);
+    }
   });
 });
 

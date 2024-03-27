@@ -3,9 +3,15 @@
   "name": "Mi Extensión",
   "version": "1.0",
   "description": "Descripción de mi extensión.",
-  "permissions": ["activeTab", "scripting"],
+  "permissions": ["activeTab", "scripting","storage"],
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*",
+    "http://localhost:3000/"
+],
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.js",
+    "type": "module"
   },
   "action": {
     "default_popup": "popup.html"
@@ -19,11 +25,11 @@
   "web_accessible_resources": [
     {
       "resources": ["lib/socket.io.min.js"],
-      "matches": []
+      "matches": ["https://preev.com/*"]
     }
   ],
   "content_security_policy": {
-    "extension_pages": "script-src 'self' http://localhost:3000; object-src 'self'"
+    "extension_pages": "script-src 'self' http://localhost:3000; object-src 'self'; connect-src https://cdnjs.cloudflare.com ws://localhost:3000"
   }
 }
 
